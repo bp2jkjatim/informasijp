@@ -1,0 +1,536 @@
+{
+  "sourceFile": "Data SDM BP2JK Jatim.20260420121614502.xlsx",
+  "records": [
+    {
+      "sequence": 1,
+      "name": "Husnan Tajrie, S.T., M.T",
+      "totalHours": 95.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 2,
+      "name": "Ode Siti Andini Ladamay, ST. MT.",
+      "totalHours": 50.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 3,
+      "name": "Esthy Dwinda Purwaningjati, SH",
+      "totalHours": 170.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 4,
+      "name": "Isti Puji Rahayu, ST",
+      "totalHours": 20.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 5,
+      "name": "Edi Pramono, ST",
+      "totalHours": 25.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 6,
+      "name": "Ir. Achmad Darmawijaya, MM",
+      "totalHours": 20.5,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 6,
+      "name": "Ratri Ayu Rahmayanti, S.I.P, MT",
+      "totalHours": 25.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 7,
+      "name": "Budiasih Dyah Saraswati, S.Kom",
+      "totalHours": 20.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 8,
+      "name": "Putri Oktaviana A.P.Kb.N",
+      "totalHours": 20.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 9,
+      "name": "Deinald Yuferson Damaledo, ST",
+      "totalHours": 36.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 10,
+      "name": "Rendra Proysa, ST",
+      "totalHours": 26.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 11,
+      "name": "Feby Lorentika, ST",
+      "totalHours": 31.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 12,
+      "name": "Masruro Tufani Ahmad, S.Kom.,MT",
+      "totalHours": 37.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 13,
+      "name": "Agus Hakim",
+      "totalHours": 45.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 14,
+      "name": "Daffah Ulfi Rahmatillah,SH",
+      "totalHours": 23.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 15,
+      "name": "Arie Ardiansyah, SH",
+      "totalHours": 22.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 16,
+      "name": "Dyah Kusumaning Putri, S.E",
+      "totalHours": 59.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 17,
+      "name": "Wan Achmad Reza Rinatha, ST, MT",
+      "totalHours": 22.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 18,
+      "name": "Teddy Marza Kurniawan, S.H",
+      "totalHours": 21.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 19,
+      "name": "Febrian Sandhi Festanto, SH",
+      "totalHours": 4.0,
+      "statusText": "Tidak Memenuhi",
+      "employeeType": "PNS",
+      "completed": false,
+      "progress": 20
+    },
+    {
+      "sequence": 20,
+      "name": "Sasetyo Gilang Kusumo, SH",
+      "totalHours": 28.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 21,
+      "name": "Gunawan Arif Wibowo, S.AP., M.T",
+      "totalHours": 25.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 22,
+      "name": "Diah Putri Rahmawati, S.Tr.T",
+      "totalHours": 26.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 22,
+      "name": "Agnesia Margaretha Gunawan, S.IAN",
+      "totalHours": 22.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 23,
+      "name": "Khairu Annisa Hariadi, S.T.,M.T",
+      "totalHours": 31.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 24,
+      "name": "Rifqathin Ulya, S.H.,M.H",
+      "totalHours": 64.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 25,
+      "name": "Bima Sakti Prayitno, S.T.",
+      "totalHours": 30.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 26,
+      "name": "Maya Puspita Maharani, S.H.,LL.M",
+      "totalHours": 22.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 27,
+      "name": "Rani Fajar Nestiti, S.T",
+      "totalHours": 25.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 28,
+      "name": "Fauzianggi Rahmi Fitri, S.E.,M.T.",
+      "totalHours": 31.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 29,
+      "name": "Dwi Ananta Irwinsyah Putra, S.E.",
+      "totalHours": 58.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 30,
+      "name": "Dimas Al Hakim, S.H.",
+      "totalHours": 34.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 31,
+      "name": "Risa Monika, S.IP",
+      "totalHours": 93.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 32,
+      "name": "Maryam Amin, SE",
+      "totalHours": 34.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 33,
+      "name": "Elly Sulistyowati, SE",
+      "totalHours": 47.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 34,
+      "name": "Siti Jauharoh Kartika Sari, S.I.Kom.",
+      "totalHours": 43.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 38,
+      "name": "Reski Aditya Desyawan, S.ST.",
+      "totalHours": 22.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 35,
+      "name": "Dhina Tri Hendriani, SE",
+      "totalHours": 45.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 36,
+      "name": "Ahnaf Dzaky Rheinanda, S.H.",
+      "totalHours": 56.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 37,
+      "name": "Aisyah Nihayah Ni'mah, S.I.Kom",
+      "totalHours": 59.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 38,
+      "name": "Amridio Zulhilmi Saifinnuha, S.Kom",
+      "totalHours": 30.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 39,
+      "name": "Ardhi Wisnu Nugraha, S.T.",
+      "totalHours": 50.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 40,
+      "name": "Aulia Hurin In, A.Md.",
+      "totalHours": 24.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 41,
+      "name": "Chofifa Hidayati, S.Kom",
+      "totalHours": 33.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 42,
+      "name": "Dahniar Achlis, S.Ars.",
+      "totalHours": 32.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 43,
+      "name": "Farah Rosa Bela Asnawi, S.Ars",
+      "totalHours": 77.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 44,
+      "name": "Lalu Yodit Dwi Anggara, S.Ars.",
+      "totalHours": 31.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 45,
+      "name": "Moh. Wildan Andhra Kusuma, S.T.",
+      "totalHours": 62.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 46,
+      "name": "Namiratus Syarifah, S.T.",
+      "totalHours": 29.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 47,
+      "name": "Pingkan Ernomo Putri, A.Md",
+      "totalHours": 24.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 48,
+      "name": "Rahmanda Rafsyanjani, S.Ak.",
+      "totalHours": 41.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 49,
+      "name": "Richardo Pratama Uruilal, S.T.",
+      "totalHours": 35.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 50,
+      "name": "Shabira Almaas Yanaayuri, S.Sn.",
+      "totalHours": 700.0,
+      "statusText": "Memenuhi",
+      "employeeType": "PNS",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 51,
+      "name": "Dea Septiani, S.ST",
+      "totalHours": 5.0,
+      "statusText": "Memenuhi",
+      "employeeType": "P3K",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 52,
+      "name": "Rudi Arifin",
+      "totalHours": 2.0,
+      "statusText": "Memenuhi",
+      "employeeType": "P3K",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 53,
+      "name": "Muklis Sugeng Hariadi",
+      "totalHours": 18.0,
+      "statusText": "Memenuhi",
+      "employeeType": "P3K",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 54,
+      "name": "Sapto Daryanto",
+      "totalHours": 15.0,
+      "statusText": "Memenuhi",
+      "employeeType": "P3K",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 55,
+      "name": "Budi Prayitno Utomo, S.T.",
+      "totalHours": 20.0,
+      "statusText": "Memenuhi",
+      "employeeType": "P3K",
+      "completed": true,
+      "progress": 100
+    },
+    {
+      "sequence": 56,
+      "name": "Wiji Putra Imaskadiyawanto, S.Kom",
+      "totalHours": 2.0,
+      "statusText": "Memenuhi",
+      "employeeType": "P3K",
+      "completed": true,
+      "progress": 100
+    }
+  ]
+}
