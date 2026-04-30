@@ -31,7 +31,7 @@ function App() {
   })
 
   useEffect(() => {
-    fetch('/data/jp-data.json')
+    fetch(`${import.meta.env.BASE_URL}data/jp-data.json`)
       .then((response) => response.json())
       .then((payload) => setRecords(payload.records ?? []))
       .catch((error) => {
@@ -174,11 +174,11 @@ function App() {
     <main className="page-shell">
       <section className="dashboard">
         <header className="hero-bar">
-          <div className="brand-mark" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </div>
+          <img
+            src={`${import.meta.env.BASE_URL}assets/images/e01d1270f141959da6c176695517c8ef.jpg`}
+            alt="Logo"
+            className="header-logo"
+          />
 
           <div className="hero-copy">
             <p className="hero-kicker">Panel Informasi JP</p>

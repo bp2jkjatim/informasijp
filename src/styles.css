@@ -51,25 +51,10 @@ textarea {
   background: linear-gradient(135deg, #2248b4 0%, #335fd0 100%);
 }
 
-.brand-mark {
-  display: grid;
-  grid-template-columns: repeat(2, 26px);
-  grid-template-rows: repeat(2, 26px);
-  gap: 6px;
-  padding: 8px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.brand-mark span {
-  display: block;
-  border-radius: 999px;
-  background: #ffd152;
-}
-
-.brand-mark span:nth-child(3) {
-  grid-column: 1 / span 2;
-  width: 26px;
+.header-logo {
+  height: 64px;
+  width: auto;
+  object-fit: contain;
 }
 
 .hero-copy {
