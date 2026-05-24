@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  db:
+    image: mariadb:10.4.27
+    container_name: informasijp-mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: informasijp
+      MYSQL_USER: informasijp
+      MYSQL_PASSWORD: informasijp
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./server/db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uinformasijp", "-pinformasijp"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mariadb_data:

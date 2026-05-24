@@ -5,16 +5,41 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:server": "node --watch server/index.js",
+    "dev:full": "bun run dev:server & bun run dev",
     "build": "vite build",
     "preview": "vite preview",
-    "convert:data": "python3 scripts/convert_excel.py"
+    "convert:data": "python3 scripts/convert_excel.py",
+    "db:seed": "node server/scripts/seed-default-users.js",
+    "db:test": "node server/scripts/test-db.js",
+    "db:import": "node server/scripts/import-excel.js",
+    "db:refresh-view": "node server/scripts/refresh-summary-view.js"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.10",
+    "@remixicon/react": "^4.9.0",
+    "@tanstack/react-query": "^5.90.2",
+    "@tanstack/react-router": "^1.132.23",
+    "@tanstack/react-table": "^8.21.3",
+    "@tremor/react": "^3.18.7",
+    "adm-zip": "^0.5.16",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "express-session": "^1.18.2",
+    "fast-xml-parser": "^5.3.0",
+    "multer": "^2.0.2",
+    "mysql2": "^3.15.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.11",
     "@vitejs/plugin-react": "^4.3.2",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.12",
+    "tailwindcss": "^3",
     "vite": "^5.4.10"
   }
 }
