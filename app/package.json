@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 3500",
     "build": "next build",
-    "start": "next start -p 3500",
+    "start": "next start -H 0.0.0.0 -p 3500",
     "lint": "next lint",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
@@ -14,6 +14,7 @@
     "db:import:excel": "node --env-file=.env scripts/import-excel.mjs",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
