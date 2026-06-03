@@ -67,11 +67,16 @@ if [[ -d "$REMOTE_DIR/.git" ]]; then
   git pull --ff-only origin "$BRANCH"
 else
   if [[ -e "$REMOTE_DIR" ]]; then
-    echo "$REMOTE_DIR already exists but is not a git repository"
-    exit 1
+    if [[ -n "$(find "$REMOTE_DIR" -mindepth 1 -maxdepth 1 -print -quit)" ]]; then
+      echo "$REMOTE_DIR already exists, is not a git repository, and is not empty"
+      exit 1
+    fi
+    git clone --branch "$BRANCH" "$REPO_URL" "$REMOTE_DIR"
+    cd "$REMOTE_DIR"
+  else
+    git clone --branch "$BRANCH" "$REPO_URL" "$REMOTE_DIR"
+    cd "$REMOTE_DIR"
   fi
-  git clone --branch "$BRANCH" "$REPO_URL" "$REMOTE_DIR"
-  cd "$REMOTE_DIR"
 fi
 
 cd "$REMOTE_DIR/app"
