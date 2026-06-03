@@ -12,10 +12,11 @@ services:
       - "127.0.0.1:3500:3500"
     volumes:
       - uploads_data:/app/uploads
+      - ../Data SDM BP2JK Jatim-3.xlsx:/Data SDM BP2JK Jatim-3.xlsx:ro
     depends_on:
       mariadb:
         condition: service_healthy
-    command: sh -c "npm run prisma:migrate:deploy && npm run start"
+    command: sh -c "npm run prisma:migrate:deploy && node prisma/seed.mjs && node scripts/import-excel.mjs && npm run start"
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3500/sisdm/api/health"]
       interval: 30s
