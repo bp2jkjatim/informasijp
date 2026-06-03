@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { Button, Callout, Card, TextInput, Title } from "@tremor/react";
 import { RiLockPasswordLine, RiUserLine } from "@remixicon/react";
+import { appPath } from "@/lib/paths";
 
 export function LoginForm() {
   const [username, setUsername] = useState("");
@@ -16,7 +17,7 @@ export function LoginForm() {
     setError("");
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch(appPath("/api/auth/login"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +36,7 @@ export function LoginForm() {
         return;
       }
 
-      window.location.href = payload.redirectTo || "/";
+      window.location.href = payload.redirectTo || appPath("/");
     } catch {
       setError("Terjadi gangguan koneksi saat login.");
     } finally {

@@ -12,6 +12,7 @@ import {
 } from "@remixicon/react";
 import { Callout, Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
 import { PaginationControls, useTablePagination } from "@/components/table-pagination";
+import { appPath } from "@/lib/paths";
 
 type TrainingRecord = {
   id: number;
@@ -95,7 +96,7 @@ export function TrainingRecordsTable({
     setSubmitState("");
 
     try {
-      const response = await fetch(`/api/trainings/${id}`, {
+      const response = await fetch(appPath(`/api/trainings/${id}`), {
         method: "DELETE",
       });
 

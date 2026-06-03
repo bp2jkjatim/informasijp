@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useState } from "react";
 import {
@@ -13,6 +12,7 @@ import {
 } from "@remixicon/react";
 import { Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
 import { PaginationControls, useTablePagination } from "@/components/table-pagination";
+import { appPath } from "@/lib/paths";
 
 type SupportingDocumentRecord = {
   id: number;
@@ -93,7 +93,7 @@ export function SupportingDocumentTable({
     setBusyId(record.id);
 
     try {
-      const response = await fetch(`/api/supporting-documents/${record.id}`, {
+      const response = await fetch(appPath(`/api/supporting-documents/${record.id}`), {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -127,7 +127,7 @@ export function SupportingDocumentTable({
     setBusyId(record.id);
 
     try {
-      const response = await fetch(`/api/supporting-documents/${record.id}`, {
+      const response = await fetch(appPath(`/api/supporting-documents/${record.id}`), {
         method: "DELETE",
       });
       const payload = (await response.json()) as { ok?: boolean; message?: string };
@@ -176,10 +176,10 @@ export function SupportingDocumentTable({
 
     if (href) {
       return (
-        <Link href={href} target={target} aria-label={title} className={className}>
+        <a href={href} target={target} aria-label={title} className={className}>
           {tooltip}
           {children}
-        </Link>
+        </a>
       );
     }
 
@@ -237,7 +237,7 @@ export function SupportingDocumentTable({
                     <div className="flex flex-wrap gap-2">
                       {canPreview(record.mimeType) ? (
                         <ActionIconButton
-                          href={`/api/supporting-documents/files/${record.id}?mode=preview`}
+                          href={appPath(`/api/supporting-documents/files/${record.id}?mode=preview`)}
                           target="_blank"
                           title="Preview file"
                         >
@@ -245,7 +245,7 @@ export function SupportingDocumentTable({
                         </ActionIconButton>
                       ) : null}
                       <ActionIconButton
-                        href={`/api/supporting-documents/files/${record.id}?mode=download`}
+                        href={appPath(`/api/supporting-documents/files/${record.id}?mode=download`)}
                         title="Download file"
                       >
                         <RiDownloadLine size={16} />

@@ -2,6 +2,7 @@
 
 import { ChangeEvent, FormEvent, useMemo, useState } from "react";
 import { Button, Callout, Card, NumberInput, Select, SelectItem, TextInput, Title } from "@tremor/react";
+import { appPath } from "@/lib/paths";
 
 type EmployeeOption = {
   id: number;
@@ -96,7 +97,7 @@ export function TrainingForm({
         formData.set("certificateFile", certificateFile);
       }
 
-      const response = await fetch(submitUrl, {
+      const response = await fetch(appPath(submitUrl), {
         method: submitMethod,
         body: formData,
       });

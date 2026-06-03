@@ -6,6 +6,7 @@ import { ShellFrame } from "@/components/shell-frame";
 import { SupportingDocumentReviewForm } from "@/components/supporting-document-review-form";
 import { SupportingDocumentTable } from "@/components/supporting-document-table";
 import { getPeriodLabel, getSupportingDocumentsByPeriod } from "@/lib/supporting-documents";
+import { appPath } from "@/lib/paths";
 import { prisma } from "@/lib/prisma";
 
 type AdminSupportingDocumentsValidationDetailPageProps = {
@@ -26,7 +27,7 @@ export default async function AdminSupportingDocumentsValidationDetailPage({
   const periodYear = Number(searchParams?.periodYear || 0);
 
   if (!employeeId || !periodMonth || !periodYear) {
-    redirect("/admin/validasi-bukti-dukung");
+    redirect(appPath("/admin/validasi-bukti-dukung"));
   }
 
   const selectedEmployee = await prisma.employee.findUnique({
@@ -39,7 +40,7 @@ export default async function AdminSupportingDocumentsValidationDetailPage({
   });
 
   if (!selectedEmployee) {
-    redirect("/admin/validasi-bukti-dukung");
+    redirect(appPath("/admin/validasi-bukti-dukung"));
   }
 
   const periodData = await getSupportingDocumentsByPeriod(employeeId, periodMonth, periodYear);

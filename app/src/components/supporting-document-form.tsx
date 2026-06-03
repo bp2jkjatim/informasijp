@@ -2,6 +2,7 @@
 
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Callout, Card, NumberInput, Select, SelectItem, TextInput, Title } from "@tremor/react";
+import { appPath } from "@/lib/paths";
 
 type EmployeeOption = {
   id: number;
@@ -56,7 +57,7 @@ export function SupportingDocumentForm({
       formData.set("description", description);
       if (file) formData.set("file", file);
 
-      const response = await fetch("/api/supporting-documents", {
+      const response = await fetch(appPath("/api/supporting-documents"), {
         method: "POST",
         body: formData,
       });

@@ -102,6 +102,7 @@ MYSQL_PASSWORD=${mysql_password}
 
 DATABASE_URL=mysql://informasijp:${mysql_password}@mariadb:3306/informasijp_app
 SESSION_SECRET=${session_secret}
+NEXT_PUBLIC_BASE_PATH=/sisdm
 ENV_FILE
 
   chmod 600 .env.production

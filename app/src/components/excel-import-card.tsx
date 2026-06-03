@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button, Callout, Card, Text, Title } from "@tremor/react";
+import { appPath } from "@/lib/paths";
 
 type ImportResult = {
   sourceFile: string;
@@ -25,7 +26,7 @@ export function ExcelImportCard() {
     setError("");
 
     try {
-      const response = await fetch("/api/import/excel", {
+      const response = await fetch(appPath("/api/import/excel"), {
         method: "POST",
       });
       const payload = (await response.json()) as {

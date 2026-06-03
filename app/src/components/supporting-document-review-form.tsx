@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { RiCheckboxCircleFill, RiTimeLine } from "@remixicon/react";
 import { Button, Callout, Card, Textarea, Text, Title } from "@tremor/react";
+import { appPath } from "@/lib/paths";
 
 type SupportingDocumentReviewFormProps = {
   employeeId: number;
@@ -63,7 +64,7 @@ export function SupportingDocumentReviewForm({
     setMessage(null);
 
     try {
-      const response = await fetch("/api/supporting-documents/review", {
+      const response = await fetch(appPath("/api/supporting-documents/review"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

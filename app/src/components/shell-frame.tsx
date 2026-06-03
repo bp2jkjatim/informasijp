@@ -15,6 +15,7 @@ import {
   RiFileList2Line,
   RiSettings3Line,
 } from "@remixicon/react";
+import { appPath, basePath } from "@/lib/paths";
 
 type ShellFrameProps = {
   title: string;
@@ -48,6 +49,10 @@ export function ShellFrame({
   currentUser,
 }: ShellFrameProps) {
   const pathname = usePathname();
+  const activePathname =
+    basePath && pathname.startsWith(basePath)
+      ? pathname.slice(basePath.length) || "/"
+      : pathname;
   const navSections: NavSection[] = currentUser
     ? currentUser.role === "admin"
       ? [
@@ -119,8 +124,8 @@ export function ShellFrame({
                   {section.items.map((item) => {
                     const Icon = item.icon;
                     const active =
-                      pathname === item.href ||
-                      (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+                      activePathname === item.href ||
+                      (item.href !== "/" && activePathname.startsWith(`${item.href}/`));
 
                     return (
                       <Link
@@ -147,7 +152,7 @@ export function ShellFrame({
               <p className="mt-2 text-sm leading-6 text-slate-500">
                 {currentUser.username} · {currentUser.role} · {currentUser.jobTitle}
               </p>
-              <form action="/api/auth/logout" method="post" className="mt-3">
+              <form action={appPath("/api/auth/logout")} method="post" className="mt-3">
                 <button
                   type="submit"
                   className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"

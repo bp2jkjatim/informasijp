@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { Button, Callout, Card, TextInput, Title } from "@tremor/react";
+import { appPath } from "@/lib/paths";
 
 type SubmitState = {
   type: "success" | "error";
@@ -21,7 +22,7 @@ export function ChangePasswordForm() {
     setSubmitState(null);
 
     try {
-      const response = await fetch("/api/account/password", {
+      const response = await fetch(appPath("/api/account/password"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

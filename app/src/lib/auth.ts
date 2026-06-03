@@ -3,6 +3,7 @@ import "server-only";
 import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { appPath, basePath } from "@/lib/paths";
 import { prisma } from "@/lib/prisma";
 
 const SESSION_COOKIE_NAME = "informasijp_session";
@@ -84,14 +85,20 @@ export async function createUserSession(userId: number) {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    path: "/",
+    path: basePath || "/",
     maxAge: SESSION_MAX_AGE,
   });
 }
 
 export function clearUserSession() {
   const cookieStore = cookies();
-  cookieStore.delete(SESSION_COOKIE_NAME);
+  cookieStore.set(SESSION_COOKIE_NAME, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: basePath || "/",
+    maxAge: 0,
+  });
 }
 
 export async function getCurrentUser() {
@@ -120,7 +127,7 @@ export async function requireCurrentUser() {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(appPath("/login"));
   }
 
   return user;
@@ -130,12 +137,12 @@ export async function requireAdminUser() {
   const user = await requireCurrentUser();
 
   if (user.role !== "admin") {
-    redirect("/pegawai");
+    redirect(appPath("/pegawai"));
   }
 
   return user;
 }
 
 export function getUserHomePath(role: string) {
-  return role === "admin" ? "/admin" : "/pegawai";
+  return appPath(role === "admin" ? "/admin" : "/pegawai");
 }

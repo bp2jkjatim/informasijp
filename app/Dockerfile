@@ -8,7 +8,9 @@ RUN npm ci
 FROM node:20-alpine AS builder
 
 WORKDIR /app
+ARG NEXT_PUBLIC_BASE_PATH=/sisdm
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_PUBLIC_BASE_PATH=${NEXT_PUBLIC_BASE_PATH}
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -19,11 +21,13 @@ RUN npm run build
 FROM node:20-alpine AS runner
 
 WORKDIR /app
+ARG NEXT_PUBLIC_BASE_PATH=/sisdm
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3500
+ENV NEXT_PUBLIC_BASE_PATH=${NEXT_PUBLIC_BASE_PATH}
 
 RUN addgroup -S nextjs && adduser -S nextjs -G nextjs
 
