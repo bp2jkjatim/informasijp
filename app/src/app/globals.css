@@ -1,0 +1,241 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #0b1220;
+  --app-surface: #f4f7fb;
+  --app-grid: rgba(100, 116, 139, 0.14);
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  background-image: none;
+  font-family: var(--font-sans), sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-slate-300;
+  }
+
+  html {
+    font-size: 14px;
+  }
+
+  body {
+    @apply min-h-screen text-slate-950 antialiased;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+}
+
+@layer components {
+  .panel-card {
+    @apply border border-slate-300 bg-white shadow-none ring-0;
+  }
+
+  .planner-sidebar {
+    @apply border border-slate-300 bg-white shadow-none;
+  }
+
+  .planner-main {
+    @apply border border-slate-300 bg-white shadow-none;
+  }
+
+  .planner-card {
+    @apply border border-slate-300 bg-white ring-0 shadow-none;
+  }
+
+  .planner-nav-item {
+    @apply flex items-center justify-between rounded-[4px] px-3 py-2 text-[13px] font-medium text-slate-800 transition hover:bg-slate-100 hover:text-slate-950;
+  }
+
+  .planner-nav-item-active {
+    @apply bg-slate-100 text-slate-950;
+  }
+
+  .planner-filter-button {
+    @apply inline-flex items-center rounded-[4px] border border-slate-300 bg-white px-3 py-1.5 text-[13px] font-medium text-slate-800 transition hover:bg-slate-100;
+  }
+
+  .planner-tab-list {
+    @apply !rounded-lg !border !border-slate-300 !bg-slate-100 !p-1;
+  }
+
+  .planner-card {
+    padding: 1rem !important;
+  }
+
+  .planner-main {
+    padding: 0.85rem !important;
+  }
+
+  .planner-sidebar {
+    padding: 0.85rem !important;
+  }
+
+  .planner-card,
+  .planner-main,
+  .planner-sidebar {
+    border-radius: 4px !important;
+  }
+
+  .planner-card .rounded-3xl,
+  .planner-main .rounded-3xl,
+  .planner-sidebar .rounded-3xl {
+    border-radius: 4px !important;
+  }
+
+  .planner-card .rounded-2xl,
+  .planner-main .rounded-2xl,
+  .planner-sidebar .rounded-2xl {
+    border-radius: 4px !important;
+  }
+
+  .planner-card .rounded-xl,
+  .planner-main .rounded-xl,
+  .planner-sidebar .rounded-xl {
+    border-radius: 4px !important;
+  }
+
+  .planner-card :where(.rounded-lg, .rounded-md, .rounded-sm, .rounded-full, .rounded-[24px], .rounded-[26px], .rounded-[28px]),
+  .planner-main :where(.rounded-lg, .rounded-md, .rounded-sm, .rounded-full, .rounded-[24px], .rounded-[26px], .rounded-[28px]),
+  .planner-sidebar :where(.rounded-lg, .rounded-md, .rounded-sm, .rounded-full, .rounded-[24px], .rounded-[26px], .rounded-[28px]) {
+    border-radius: 4px !important;
+  }
+
+  .planner-card :where(input, select, textarea),
+  .planner-main :where(input, select, textarea) {
+    @apply border-slate-300 text-slate-950 placeholder:text-slate-500;
+    font-size: 13px !important;
+    line-height: 1.35rem !important;
+  }
+
+  .planner-card :where(th),
+  .planner-main :where(th) {
+    @apply text-slate-900;
+    font-size: 12px !important;
+    line-height: 1.1rem !important;
+  }
+
+  .planner-card :where(td),
+  .planner-main :where(td) {
+    @apply text-slate-800;
+    font-size: 13px !important;
+    line-height: 1.25rem !important;
+  }
+
+  .planner-card :where(table),
+  .planner-main :where(table) {
+    width: 100% !important;
+    table-layout: fixed;
+  }
+
+  .planner-card :where(th, td),
+  .planner-main :where(th, td) {
+    vertical-align: top;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .planner-sidebar :where(button, a, p, span, label, li),
+  .planner-main :where(button, a, p, span, label, li),
+  .planner-card :where(button, a, p, span, label, li) {
+    font-size: 13px;
+  }
+
+  .planner-sidebar :where(h1),
+  .planner-main :where(h1) {
+    font-size: 24px !important;
+    line-height: 1.2 !important;
+  }
+
+  .planner-sidebar :where(h2),
+  .planner-main :where(h2),
+  .planner-card :where(h2) {
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+  }
+
+  .planner-sidebar :where(h3),
+  .planner-main :where(h3),
+  .planner-card :where(h3) {
+    font-size: 17px !important;
+    line-height: 1.25 !important;
+  }
+
+  .planner-sidebar :where(h4),
+  .planner-main :where(h4),
+  .planner-card :where(h4) {
+    font-size: 15px !important;
+    line-height: 1.25 !important;
+  }
+
+  .planner-main :where(.tremor-Text-root),
+  .planner-card :where(.tremor-Text-root),
+  .planner-main :where(.tremor-Metric-root),
+  .planner-card :where(.tremor-Metric-root),
+  .planner-main :where(.tremor-Title-root),
+  .planner-card :where(.tremor-Title-root) {
+    font-size: inherit;
+  }
+
+  .planner-main :where(button),
+  .planner-card :where(button),
+  .planner-main :where(a.inline-flex),
+  .planner-card :where(a.inline-flex) {
+    line-height: 1.2rem;
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+  }
+
+  .planner-card :where(.space-y-4 > :not([hidden]) ~ :not([hidden])),
+  .planner-main :where(.space-y-4 > :not([hidden]) ~ :not([hidden])) {
+    margin-top: 0.75rem !important;
+  }
+
+  .planner-card :where(.space-y-5 > :not([hidden]) ~ :not([hidden])),
+  .planner-main :where(.space-y-5 > :not([hidden]) ~ :not([hidden])) {
+    margin-top: 0.9rem !important;
+  }
+
+  .planner-card :where(.space-y-6 > :not([hidden]) ~ :not([hidden])),
+  .planner-main :where(.space-y-6 > :not([hidden]) ~ :not([hidden])) {
+    margin-top: 1rem !important;
+  }
+
+  .planner-card :where(.gap-4),
+  .planner-main :where(.gap-4) {
+    gap: 0.75rem !important;
+  }
+
+  .planner-card :where(.gap-5),
+  .planner-main :where(.gap-5) {
+    gap: 0.9rem !important;
+  }
+
+  .planner-card :where(.gap-6),
+  .planner-main :where(.gap-6) {
+    gap: 1rem !important;
+  }
+}
+
+@layer utilities {
+  .bg-app-surface {
+    background-color: var(--app-surface);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}

@@ -1,0 +1,144 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+enum UserRole {
+  admin
+  leader
+  kepala_balai
+  ktu
+  user
+}
+
+enum EmployeeStatus {
+  PNS
+  P3K
+  LAINNYA
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  username       String    @unique @db.VarChar(100)
+  passwordHash   String    @map("password_hash") @db.VarChar(255)
+  role           UserRole  @default(user)
+  employeeId     Int?      @unique @map("employee_id")
+  isActive       Boolean   @default(true) @map("is_active")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  employee       Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  createdTrainings Training[] @relation("TrainingCreatedBy")
+  supportingDocuments SupportingDocument[] @relation("SupportingDocumentCreatedBy")
+  reviewedSupportPeriods SupportingDocumentPeriodReview[] @relation("SupportingDocumentReviewedBy")
+
+  @@map("users")
+}
+
+model Employee {
+  id                Int             @id @default(autoincrement())
+  nip               String          @unique @db.VarChar(50)
+  name              String          @db.VarChar(191)
+  jobTitle          String?         @map("job_title") @db.VarChar(191)
+  phone             String?         @db.VarChar(50)
+  employmentState   String?         @map("employment_state") @db.VarChar(50)
+  employeeStatus    EmployeeStatus  @default(LAINNYA) @map("employee_status")
+  positionLevel     String?         @map("position_level") @db.VarChar(100)
+  rankGroup         String?         @map("rank_group") @db.VarChar(100)
+  tmtRank           DateTime?       @map("tmt_rank") @db.Date
+  tmtPosition       DateTime?       @map("tmt_position") @db.Date
+  akumulasiAk2025   Decimal?        @map("akumulasi_ak_2025") @db.Decimal(10, 2)
+  notes             String?         @db.Text
+  jpTarget          Int             @default(20) @map("jp_target")
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime        @updatedAt @map("updated_at")
+  user              User?
+  trainings         Training[]
+  supportingDocuments SupportingDocument[]
+  supportingDocumentPeriodReviews SupportingDocumentPeriodReview[]
+
+  @@map("employees")
+}
+
+model Training {
+  id                  Int       @id @default(autoincrement())
+  employeeId          Int       @map("employee_id")
+  proposedTraining    String?   @map("proposed_training") @db.Text
+  trainingName        String    @map("training_name") @db.Text
+  trainingDateText    String?   @map("training_date_text") @db.VarChar(100)
+  trainingProvider    String?   @map("training_provider") @db.Text
+  certificateNumber   String?   @map("certificate_number") @db.VarChar(191)
+  certificateFilePath String?   @map("certificate_file_path") @db.VarChar(255)
+  certificateLink     String?   @map("certificate_link") @db.VarChar(255)
+  isPbj               Boolean   @default(false) @map("is_pbj")
+  isJabatan           Boolean   @default(false) @map("is_jabatan")
+  isIntegritas        Boolean   @default(false) @map("is_integritas")
+  jumlahJp            Decimal   @map("jumlah_jp") @db.Decimal(10, 2)
+  year                Int
+  createdByUserId     Int?      @map("created_by_user_id")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+  employee            Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  createdByUser       User?     @relation("TrainingCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  @@index([employeeId], map: "idx_trainings_employee_id")
+  @@index([year], map: "idx_trainings_year")
+  @@index([createdByUserId], map: "idx_trainings_created_by_user_id")
+  @@map("trainings")
+}
+
+model SystemSetting {
+  key       String   @id @db.VarChar(100)
+  value     String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("system_settings")
+}
+
+model SupportingDocument {
+  id               Int       @id @default(autoincrement())
+  employeeId       Int       @map("employee_id")
+  periodMonth      Int       @map("period_month")
+  periodYear       Int       @map("period_year")
+  description      String    @db.Text
+  fileOriginalName String    @map("file_original_name") @db.Text
+  fileStoredName   String    @map("file_stored_name") @db.VarChar(255)
+  filePath         String    @map("file_path") @db.VarChar(255)
+  mimeType         String?   @map("mime_type") @db.VarChar(191)
+  createdByUserId  Int?      @map("created_by_user_id")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  employee         Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  createdByUser    User?     @relation("SupportingDocumentCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  @@index([employeeId, periodYear, periodMonth], map: "idx_supporting_documents_period")
+  @@index([createdByUserId], map: "idx_supporting_documents_created_by")
+  @@map("supporting_documents")
+}
+
+model SupportingDocumentPeriodReview {
+  id               Int       @id @default(autoincrement())
+  employeeId       Int       @map("employee_id")
+  periodMonth      Int       @map("period_month")
+  periodYear       Int       @map("period_year")
+  comment          String?   @db.Text
+  reviewedByUserId Int?      @map("reviewed_by_user_id")
+  reviewedAt       DateTime? @map("reviewed_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  employee         Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewedByUser   User?     @relation("SupportingDocumentReviewedBy", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+
+  @@unique([employeeId, periodYear, periodMonth], map: "uniq_supporting_document_period_review")
+  @@index([reviewedByUserId], map: "idx_supporting_document_period_reviews_reviewer")
+  @@map("supporting_document_period_reviews")
+}
+
+// employee_yearly_summary is planned as a database view or computed query layer.
+// It is intentionally not materialized in the Prisma schema yet, because phase 2
+// focuses on the core write tables and a stable database foundation first.
