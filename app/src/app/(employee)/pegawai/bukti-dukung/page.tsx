@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requireCurrentUser } from "@/lib/auth";
 import {
   getEmployeeSupportingDocumentPeriods,
@@ -7,6 +8,7 @@ import {
 import { ShellFrame } from "@/components/shell-frame";
 import { SupportingDocumentTable } from "@/components/supporting-document-table";
 import { SupportingDocumentPeriodsTable } from "@/components/supporting-document-periods-table";
+import { appPath } from "@/lib/paths";
 import {
   RiAddLine,
   RiDownloadLine,
@@ -101,22 +103,22 @@ export default async function EmployeeSupportingDocumentsPage({
                 <RiFilter3Line size={16} className="mr-2" />
                 Terapkan filter
               </button>
-              <a
+              <Link
                 href="/pegawai/bukti-dukung/new"
                 className="inline-flex rounded-lg border border-slate-300 bg-slate-950 px-3.5 py-2 text-sm font-medium text-white transition hover:bg-slate-800"
               >
                 <RiAddLine size={16} className="mr-2" />
                 Tambah
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/pegawai/bukti-dukung"
                 className="inline-flex rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
               >
                 <RiRestartLine size={16} className="mr-2" />
                 Reset
-              </a>
+              </Link>
               <a
-                href={`/api/supporting-documents/export${exportParams.toString() ? `?${exportParams.toString()}` : ""}`}
+                href={appPath(`/api/supporting-documents/export${exportParams.toString() ? `?${exportParams.toString()}` : ""}`)}
                 className="inline-flex rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
               >
                 <RiDownloadLine size={16} className="mr-2" />

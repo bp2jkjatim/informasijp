@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { ShellFrame } from "@/components/shell-frame";
 import { TrainingRecordsTable } from "@/components/training-records-table";
 import { requireAdminUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getAdminTrainingRecords, getTrainingYears } from "@/lib/trainings";
+import { appPath } from "@/lib/paths";
 import {
   RiAddLine,
   RiDownloadLine,
@@ -106,22 +108,22 @@ export default async function AdminTrainingPage({
                 <RiFilter3Line size={16} className="mr-2" />
                 Terapkan filter
               </button>
-              <a
+              <Link
                 href="/admin/diklat/new"
                 className="inline-flex rounded-lg border border-slate-300 bg-slate-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-slate-800"
               >
                 <RiAddLine size={16} className="mr-2" />
                 Tambah
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/admin/diklat"
                 className="inline-flex rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
               >
                 <RiRestartLine size={16} className="mr-2" />
                 Reset
-              </a>
+              </Link>
               <a
-                href={`/api/trainings/export${exportParams.toString() ? `?${exportParams.toString()}` : ""}`}
+                href={appPath(`/api/trainings/export${exportParams.toString() ? `?${exportParams.toString()}` : ""}`)}
                 className="inline-flex rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-900 transition hover:bg-slate-100"
               >
                 <RiDownloadLine size={16} className="mr-2" />
