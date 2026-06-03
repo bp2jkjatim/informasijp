@@ -12,7 +12,7 @@ ARG NEXT_PUBLIC_BASE_PATH=/sisdm
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NEXT_PUBLIC_BASE_PATH=${NEXT_PUBLIC_BASE_PATH}
 
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/node_modules ./node_modules
 COPY . .
 
 RUN npx prisma generate
