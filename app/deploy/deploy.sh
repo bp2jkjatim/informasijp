@@ -109,6 +109,9 @@ ENV_FILE
   echo "Created $REMOTE_DIR/app/.env.production with generated credentials"
 fi
 
-docker compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml build app migrate
+docker compose -f docker-compose.prod.yml up -d mariadb
+docker compose -f docker-compose.prod.yml run --rm migrate
+docker compose -f docker-compose.prod.yml up -d app
 docker compose -f docker-compose.prod.yml ps
 REMOTE_SCRIPT

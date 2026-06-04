@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 import { ShellFrame } from "@/components/shell-frame";
-import { TrainingForm } from "@/components/training-form";
+import { TrainingDetail } from "@/components/training-detail";
 import { requireAdminUser } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { getTrainingById } from "@/lib/trainings";
 
 type AdminTrainingEditPageProps = {
@@ -19,17 +18,7 @@ export default async function AdminTrainingEditPage({ params }: AdminTrainingEdi
     notFound();
   }
 
-  const [training, employees] = await Promise.all([
-    getTrainingById(trainingId),
-    prisma.employee.findMany({
-      orderBy: { name: "asc" },
-      select: {
-        id: true,
-        nip: true,
-        name: true,
-      },
-    }),
-  ]);
+  const training = await getTrainingById(trainingId);
 
   if (!training) {
     notFound();
@@ -38,8 +27,8 @@ export default async function AdminTrainingEditPage({ params }: AdminTrainingEdi
   return (
     <ShellFrame
       eyebrow="Admin Workspace"
-      title="Edit data diklat"
-      description="Admin dapat memperbarui data diklat yang sudah tersimpan. Perubahan langsung menulis ke database aktif."
+      title="Detail data diklat"
+      description="Admin dapat melihat sertifikat, mengecek link atau file, lalu menetapkan hasil verifikasi."
       currentUser={{
         username: user.username,
         role: user.role,
@@ -47,26 +36,10 @@ export default async function AdminTrainingEditPage({ params }: AdminTrainingEdi
         jobTitle: user.employee?.jobTitle || "-",
       }}
     >
-      <TrainingForm
+      <TrainingDetail
         mode="admin"
-        employeeOptions={employees}
-        defaultEmployeeId={training.employeeId}
-        submitUrl={`/api/trainings/${training.id}`}
-        submitMethod="PATCH"
-        submitLabel="Simpan perubahan"
-        initialValues={{
-          trainingName: training.trainingName,
-          trainingProvider: training.trainingProvider || "",
-          trainingDateText: training.trainingDateText || "",
-          certificateNumber: training.certificateNumber || "",
-          certificateLink: training.certificateLink || "",
-          jumlahJp: Number(training.jumlahJp),
-          year: training.year,
-          proposedTraining: training.proposedTraining || "",
-          isPbj: training.isPbj,
-          isJabatan: training.isJabatan,
-          isIntegritas: training.isIntegritas,
-        }}
+        training={training}
+        editPath={`/admin/diklat/${training.id}/edit`}
       />
     </ShellFrame>
   );

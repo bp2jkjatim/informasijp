@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { ShellFrame } from "@/components/shell-frame";
-import { TrainingForm } from "@/components/training-form";
+import { TrainingDetail } from "@/components/training-detail";
 import { requireCurrentUser } from "@/lib/auth";
 import { getTrainingById } from "@/lib/trainings";
 
@@ -29,8 +29,8 @@ export default async function EmployeeTrainingEditPage({
   return (
     <ShellFrame
       eyebrow="Employee Workspace"
-      title="Edit diklat pribadi"
-      description="Pegawai dapat memperbarui data diklat miliknya sendiri tanpa mengubah data pegawai lain."
+      title="Detail diklat pribadi"
+      description="Pegawai dapat melihat data diklat, sertifikat tersimpan, status verifikasi, dan catatan penolakan bila ada."
       currentUser={{
         username: user.username,
         role: user.role,
@@ -38,32 +38,10 @@ export default async function EmployeeTrainingEditPage({
         jobTitle: user.employee?.jobTitle || "-",
       }}
     >
-      <TrainingForm
+      <TrainingDetail
         mode="employee"
-        employeeOptions={[
-          {
-            id: training.employee.id,
-            name: training.employee.name,
-            nip: training.employee.nip,
-          },
-        ]}
-        defaultEmployeeId={training.employeeId}
-        submitUrl={`/api/trainings/${training.id}`}
-        submitMethod="PATCH"
-        submitLabel="Simpan perubahan"
-        initialValues={{
-          trainingName: training.trainingName,
-          trainingProvider: training.trainingProvider || "",
-          trainingDateText: training.trainingDateText || "",
-          certificateNumber: training.certificateNumber || "",
-          certificateLink: training.certificateLink || "",
-          jumlahJp: Number(training.jumlahJp),
-          year: training.year,
-          proposedTraining: training.proposedTraining || "",
-          isPbj: training.isPbj,
-          isJabatan: training.isJabatan,
-          isIntegritas: training.isIntegritas,
-        }}
+        training={training}
+        editPath={`/pegawai/diklat/${training.id}/edit`}
       />
     </ShellFrame>
   );

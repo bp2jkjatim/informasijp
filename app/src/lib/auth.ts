@@ -127,7 +127,7 @@ export async function requireCurrentUser() {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect(appPath("/login"));
+    redirect("/login");
   }
 
   return user;
@@ -137,7 +137,7 @@ export async function requireAdminUser() {
   const user = await requireCurrentUser();
 
   if (user.role !== "admin") {
-    redirect(appPath("/pegawai"));
+    redirect("/pegawai");
   }
 
   return user;

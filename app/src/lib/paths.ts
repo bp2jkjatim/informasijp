@@ -1,4 +1,4 @@
-export const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+export const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/$/, "");
 
 export function appPath(path: string) {
   if (!path) {
@@ -10,6 +10,10 @@ export function appPath(path: string) {
   }
 
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+
+  if (basePath && (normalizedPath === basePath || normalizedPath.startsWith(`${basePath}/`))) {
+    return normalizedPath;
+  }
 
   if (normalizedPath === "/") {
     return basePath || "/";

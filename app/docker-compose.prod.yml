@@ -15,13 +15,28 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-    command: sh -c "npm run prisma:migrate:deploy && npm run start"
+    command: npm run start
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3500/sisdm/api/health"]
       interval: 30s
       timeout: 5s
       retries: 5
       start_period: 30s
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_BASE_PATH: /sisdm
+    env_file:
+      - .env.production
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    command: npm run prisma:migrate:deploy
+    profiles:
+      - migrate
 
   mariadb:
     image: mariadb:10.4.27

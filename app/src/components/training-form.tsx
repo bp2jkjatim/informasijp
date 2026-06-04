@@ -23,6 +23,7 @@ type TrainingFormProps = {
     jumlahJp: number;
     year: number;
     proposedTraining: string;
+    certificateFilePath?: string | null;
     isPbj: boolean;
     isJabatan: boolean;
     isIntegritas: boolean;
@@ -271,6 +272,30 @@ export function TrainingForm({
           <label className="mb-2 block text-sm font-medium text-slate-900">
             File sertifikat
           </label>
+          {initialValues?.certificateFilePath ? (
+            <div className="mb-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-950">
+              <div className="font-medium">File tersimpan</div>
+              <div className="mt-1 break-all text-blue-800">
+                {initialValues.certificateFilePath.split("/").pop()?.replace(/^\d+-[a-f0-9-]+-/i, "")}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <a
+                  href={appPath(`${submitUrl.replace("/api/trainings", "/api/trainings/files")}?mode=preview`)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex rounded-lg border border-blue-300 bg-white px-3 py-1.5 text-xs font-medium text-blue-800 transition hover:bg-blue-100"
+                >
+                  Preview
+                </a>
+                <a
+                  href={appPath(`${submitUrl.replace("/api/trainings", "/api/trainings/files")}?mode=download`)}
+                  className="inline-flex rounded-lg border border-blue-300 bg-white px-3 py-1.5 text-xs font-medium text-blue-800 transition hover:bg-blue-100"
+                >
+                  Download
+                </a>
+              </div>
+            </div>
+          ) : null}
           <input
             type="file"
             accept=".pdf,.png,.jpg,.jpeg"

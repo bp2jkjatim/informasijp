@@ -111,6 +111,14 @@ export async function PATCH(
       isIntegritas: parseBoolean(formData.get("isIntegritas")),
       jumlahJp,
       year,
+      ...(user.role === "admin"
+        ? {}
+        : {
+            verificationStatus: "need_verification",
+            verificationNote: null,
+            verifiedByUserId: null,
+            verifiedAt: null,
+          }),
     },
   });
 

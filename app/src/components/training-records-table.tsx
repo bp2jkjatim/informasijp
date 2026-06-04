@@ -8,6 +8,7 @@ import {
   RiDeleteBinLine,
   RiEdit2Line,
   RiGovernmentLine,
+  RiEyeLine,
   RiShieldCheckLine,
 } from "@remixicon/react";
 import { Callout, Card, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Text, Title } from "@tremor/react";
@@ -22,6 +23,8 @@ type TrainingRecord = {
   certificateNumber: string | null;
   certificateFilePath: string | null;
   certificateLink: string | null;
+  verificationStatus: "need_verification" | "verified" | "rejected";
+  verificationNote: string | null;
   jumlahJp: number | { toString(): string };
   year: number;
   isPbj: boolean;
@@ -42,6 +45,7 @@ type TrainingRecordsTableProps = {
   description: string;
   records: TrainingRecord[];
   baseEditPath: string;
+  baseDetailPath?: string;
   canManageAllEmployees: boolean;
 };
 
@@ -76,6 +80,7 @@ export function TrainingRecordsTable({
   description,
   records,
   baseEditPath,
+  baseDetailPath = baseEditPath,
   canManageAllEmployees,
 }: TrainingRecordsTableProps) {
   const router = useRouter();
@@ -246,6 +251,22 @@ export function TrainingRecordsTable({
                       <StatusMarker active={record.isIntegritas} title="Kategori Integritas">
                         <RiShieldCheckLine size={16} />
                       </StatusMarker>
+                      <span
+                        className={`inline-flex min-h-8 items-center rounded-lg border px-2.5 text-xs font-medium ${
+                          record.verificationStatus === "verified"
+                            ? "border-teal-300 bg-teal-50 text-teal-800"
+                            : record.verificationStatus === "rejected"
+                              ? "border-rose-300 bg-rose-50 text-rose-800"
+                              : "border-amber-300 bg-amber-50 text-amber-800"
+                        }`}
+                        title={record.verificationNote || undefined}
+                      >
+                        {record.verificationStatus === "verified"
+                          ? "Verified"
+                          : record.verificationStatus === "rejected"
+                            ? "Rejected"
+                            : "Need verification"}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -257,7 +278,13 @@ export function TrainingRecordsTable({
                   <TableCell>
                     <div className="flex flex-wrap gap-2">
                       <ActionIconButton
-                        href={`${baseEditPath}/${record.id}`}
+                        href={`${baseDetailPath}/${record.id}`}
+                        title="Lihat detail diklat"
+                      >
+                        <RiEyeLine size={16} />
+                      </ActionIconButton>
+                      <ActionIconButton
+                        href={`${baseEditPath}/${record.id}/edit`}
                         title="Edit data diklat"
                       >
                         <RiEdit2Line size={16} />

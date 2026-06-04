@@ -40,6 +40,13 @@ export async function GET(request: NextRequest) {
     "No Sertifikat": record.certificateNumber || "-",
     "Jumlah JP": Number(record.jumlahJp),
     Tahun: record.year,
+    StatusVerifikasi:
+      record.verificationStatus === "verified"
+        ? "Verified"
+        : record.verificationStatus === "rejected"
+          ? "Rejected"
+          : "Need verification",
+    CatatanVerifikasi: record.verificationNote || "-",
     PBJ: record.isPbj ? "Ya" : "Tidak",
     JabatanFlag: record.isJabatan ? "Ya" : "Tidak",
     Integritas: record.isIntegritas ? "Ya" : "Tidak",
