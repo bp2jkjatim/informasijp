@@ -80,6 +80,16 @@ else
 fi
 
 cd "$REMOTE_DIR/app"
+GIT_COMMIT="$(git rev-parse HEAD)"
+GIT_COMMIT_SHORT="$(git rev-parse --short HEAD)"
+export GIT_COMMIT
+
+echo "Deploying Informasi JP commit ${GIT_COMMIT_SHORT}"
+
+if [[ ! -f "src/components/training-detail.tsx" ]]; then
+  echo "Expected diklat detail component is missing from this checkout"
+  exit 1
+fi
 
 random_secret() {
   if command -v openssl >/dev/null 2>&1; then
@@ -112,6 +122,7 @@ fi
 docker compose -f docker-compose.prod.yml build app migrate
 docker compose -f docker-compose.prod.yml up -d mariadb
 docker compose -f docker-compose.prod.yml run --rm migrate
-docker compose -f docker-compose.prod.yml up -d app
+docker compose -f docker-compose.prod.yml up -d --force-recreate app
 docker compose -f docker-compose.prod.yml ps
+docker compose -f docker-compose.prod.yml exec -T app sh -c 'echo "Running app commit: ${APP_GIT_COMMIT}"'
 REMOTE_SCRIPT

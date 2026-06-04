@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_BASE_PATH: /sisdm
+        GIT_COMMIT: ${GIT_COMMIT:-unknown}
     restart: unless-stopped
     env_file:
       - .env.production
@@ -29,6 +30,7 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_BASE_PATH: /sisdm
+        GIT_COMMIT: ${GIT_COMMIT:-unknown}
     env_file:
       - .env.production
     depends_on:
