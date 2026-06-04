@@ -122,7 +122,10 @@ fi
 docker compose -f docker-compose.prod.yml build app migrate
 docker compose -f docker-compose.prod.yml up -d mariadb
 docker compose -f docker-compose.prod.yml run --rm migrate
-docker compose -f docker-compose.prod.yml up -d --force-recreate app
+docker compose -f docker-compose.prod.yml stop app >/dev/null 2>&1 || true
+docker compose -f docker-compose.prod.yml rm -f app >/dev/null 2>&1 || true
+docker compose -f docker-compose.prod.yml up -d app
 docker compose -f docker-compose.prod.yml ps
 docker compose -f docker-compose.prod.yml exec -T app sh -c 'echo "Running app commit: ${APP_GIT_COMMIT}"'
+docker compose -f docker-compose.prod.yml ps -q app | xargs -r docker inspect --format 'App container created: {{.Created}}'
 REMOTE_SCRIPT
