@@ -35,6 +35,10 @@ services:
         GIT_COMMIT: ${GIT_COMMIT:-unknown}
     env_file:
       - .env.production
+    environment:
+      UPLOADS_DIR: /app/uploads
+    volumes:
+      - ${UPLOADS_HOST_DIR:-/mnt/nas/informasijp/uploads}:/app/uploads
     depends_on:
       mariadb:
         condition: service_healthy

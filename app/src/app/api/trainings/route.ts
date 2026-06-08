@@ -4,8 +4,9 @@ import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { requireCurrentUser } from "@/lib/auth";
 import {
-  buildStoredUploadPath,
+  getTrainingCertificateRelativePath,
   getUploadsSubdir,
+  sanitizeUploadPathSegment,
 } from "@/lib/uploads";
 import { getUploadSizeLimitMessage, isUploadSizeAllowed } from "@/lib/upload-limits";
 import { prisma } from "@/lib/prisma";
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
 
   const employee = await prisma.employee.findUnique({
     where: { id: employeeId },
-    select: { id: true },
+    select: { id: true, nip: true },
   });
 
   if (!employee) {
@@ -77,16 +78,20 @@ export async function POST(request: Request) {
       );
     }
 
-    const uploadsDir = getUploadsSubdir("certificates");
-    await mkdir(uploadsDir, { recursive: true });
-
     const safeName = certificateFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
     const filename = `${Date.now()}-${randomUUID()}-${safeName}`;
+    const certificatePath = getTrainingCertificateRelativePath(employee.nip, year, filename);
+    const uploadsDir = getUploadsSubdir(
+      "certificates",
+      sanitizeUploadPathSegment(employee.nip),
+      String(year),
+    );
+    await mkdir(uploadsDir, { recursive: true });
     const outputPath = path.join(uploadsDir, filename);
     const bytes = await certificateFile.arrayBuffer();
 
     await writeFile(outputPath, Buffer.from(bytes));
-    certificateFilePath = buildStoredUploadPath("certificates", filename);
+    certificateFilePath = certificatePath;
   }
 
   await prisma.training.create({

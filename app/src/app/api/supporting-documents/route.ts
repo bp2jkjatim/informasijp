@@ -5,8 +5,10 @@ import { NextResponse } from "next/server";
 import { requireCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
-  buildStoredUploadPath,
+  getSupportingDocumentPeriodSegment,
+  getSupportingDocumentRelativePath,
   getUploadsSubdir,
+  sanitizeUploadPathSegment,
 } from "@/lib/uploads";
 import { getUploadSizeLimitMessage, isUploadSizeAllowed } from "@/lib/upload-limits";
 
@@ -86,7 +88,7 @@ export async function POST(request: Request) {
 
   const employee = await prisma.employee.findUnique({
     where: { id: employeeId },
-    select: { id: true },
+    select: { id: true, nip: true },
   });
 
   if (!employee) {
@@ -96,11 +98,21 @@ export async function POST(request: Request) {
     );
   }
 
-  const uploadsDir = getUploadsSubdir("supporting-documents");
-  await mkdir(uploadsDir, { recursive: true });
-
   const safeName = uploadedFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const storedName = `${Date.now()}-${randomUUID()}-${safeName}`;
+  const periodSegment = getSupportingDocumentPeriodSegment(periodMonth, periodYear);
+  const documentPath = getSupportingDocumentRelativePath(
+    employee.nip,
+    periodMonth,
+    periodYear,
+    storedName,
+  );
+  const uploadsDir = getUploadsSubdir(
+    "supporting-documents",
+    sanitizeUploadPathSegment(employee.nip),
+    periodSegment,
+  );
+  await mkdir(uploadsDir, { recursive: true });
   const outputPath = path.join(uploadsDir, storedName);
   const bytes = await uploadedFile.arrayBuffer();
 
@@ -114,7 +126,7 @@ export async function POST(request: Request) {
       description,
       fileOriginalName: uploadedFile.name,
       fileStoredName: storedName,
-      filePath: buildStoredUploadPath("supporting-documents", storedName),
+      filePath: documentPath,
       mimeType: uploadedFile.type || null,
       createdByUserId: user.id,
     },

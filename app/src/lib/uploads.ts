@@ -1,6 +1,20 @@
 import path from "path";
 
 const STORED_UPLOADS_PREFIX = "uploads";
+const PERIOD_MONTH_LABELS = [
+  "JAN",
+  "FEB",
+  "MAR",
+  "APR",
+  "MAY",
+  "JUN",
+  "JUL",
+  "AUG",
+  "SEP",
+  "OCT",
+  "NOV",
+  "DEC",
+] as const;
 
 export function getUploadsRootDir() {
   const configuredDir = process.env.UPLOADS_DIR?.trim();
@@ -37,4 +51,37 @@ export function resolveStoredUploadPath(storedPath: string) {
   return path.isAbsolute(storedPath)
     ? storedPath
     : path.join(process.cwd(), storedPath);
+}
+
+export function sanitizeUploadPathSegment(value: string) {
+  const normalized = value.trim().replace(/[^a-zA-Z0-9._-]/g, "_");
+  return normalized || "unknown";
+}
+
+export function getSupportingDocumentPeriodSegment(periodMonth: number, periodYear: number) {
+  const monthLabel = PERIOD_MONTH_LABELS[periodMonth - 1];
+  return `${monthLabel || "UNK"}-${periodYear}`;
+}
+
+export function getTrainingCertificateRelativePath(nip: string, year: number, filename: string) {
+  return buildStoredUploadPath(
+    "certificates",
+    sanitizeUploadPathSegment(nip),
+    String(year),
+    filename,
+  );
+}
+
+export function getSupportingDocumentRelativePath(
+  nip: string,
+  periodMonth: number,
+  periodYear: number,
+  filename: string,
+) {
+  return buildStoredUploadPath(
+    "supporting-documents",
+    sanitizeUploadPathSegment(nip),
+    getSupportingDocumentPeriodSegment(periodMonth, periodYear),
+    filename,
+  );
 }

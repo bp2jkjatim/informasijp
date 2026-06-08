@@ -5,9 +5,10 @@ import { NextResponse } from "next/server";
 import { requireCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
-  buildStoredUploadPath,
+  getTrainingCertificateRelativePath,
   getUploadsSubdir,
   resolveStoredUploadPath,
+  sanitizeUploadPathSegment,
 } from "@/lib/uploads";
 import { getUploadSizeLimitMessage, isUploadSizeAllowed } from "@/lib/upload-limits";
 
@@ -17,17 +18,20 @@ function parseBoolean(value: FormDataEntryValue | null) {
   return value === "true";
 }
 
-async function saveCertificateFile(file: File) {
-  const uploadsDir = getUploadsSubdir("certificates");
-  await mkdir(uploadsDir, { recursive: true });
-
+async function saveCertificateFile(file: File, nip: string, year: number) {
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const filename = `${Date.now()}-${randomUUID()}-${safeName}`;
+  const uploadsDir = getUploadsSubdir(
+    "certificates",
+    sanitizeUploadPathSegment(nip),
+    String(year),
+  );
+  await mkdir(uploadsDir, { recursive: true });
   const outputPath = path.join(uploadsDir, filename);
   const bytes = await file.arrayBuffer();
 
   await writeFile(outputPath, Buffer.from(bytes));
-  return buildStoredUploadPath("certificates", filename);
+  return getTrainingCertificateRelativePath(nip, year, filename);
 }
 
 async function assertTrainingAccess(trainingId: number, userId: number, role: string, employeeId: number | null) {
@@ -88,6 +92,17 @@ export async function PATCH(
 
   let certificateFilePath = training.certificateFilePath;
   const certificateFile = formData.get("certificateFile");
+  const employee = await prisma.employee.findUnique({
+    where: { id: employeeId },
+    select: { id: true, nip: true },
+  });
+
+  if (!employee) {
+    return NextResponse.json(
+      { ok: false, message: "Pegawai tidak ditemukan." },
+      { status: 404 },
+    );
+  }
 
   if (certificateFile instanceof File && certificateFile.size > 0) {
     if (!isUploadSizeAllowed(certificateFile.size)) {
@@ -97,7 +112,7 @@ export async function PATCH(
       );
     }
 
-    const newPath = await saveCertificateFile(certificateFile);
+    const newPath = await saveCertificateFile(certificateFile, employee.nip, year);
 
     if (training.certificateFilePath) {
       const previousPath = resolveStoredUploadPath(training.certificateFilePath);

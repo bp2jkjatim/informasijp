@@ -152,7 +152,16 @@ migrate_uploads_from_legacy_volume() {
     -v "${source_volume}:/from:ro" \
     -v "${target_dir}:/to" \
     alpine:3.20 \
-    sh -c 'mkdir -p /to && cp -a /from/. /to/ 2>/dev/null || true'
+    sh -c '
+      set -e
+      mkdir -p /to/certificates /to/supporting-documents
+      if [ -d /from/certificates ]; then
+        cp -rvn /from/certificates/. /to/certificates/
+      fi
+      if [ -d /from/supporting-documents ]; then
+        cp -rvn /from/supporting-documents/. /to/supporting-documents/
+      fi
+    '
 }
 
 docker compose -f docker-compose.prod.yml build app migrate
@@ -161,6 +170,7 @@ docker compose -f docker-compose.prod.yml run --rm migrate
 docker compose -f docker-compose.prod.yml stop app >/dev/null 2>&1 || true
 docker compose -f docker-compose.prod.yml rm -f app >/dev/null 2>&1 || true
 migrate_uploads_from_legacy_volume "$UPLOADS_HOST_DIR"
+docker compose -f docker-compose.prod.yml run --rm migrate npm run uploads:migrate:paths
 docker compose -f docker-compose.prod.yml up -d app
 docker compose -f docker-compose.prod.yml ps
 docker compose -f docker-compose.prod.yml exec -T app sh -c 'echo "Running app commit: ${APP_GIT_COMMIT}"'

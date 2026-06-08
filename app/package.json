@@ -12,6 +12,7 @@
     "db:logs": "docker compose logs -f mariadb",
     "db:seed": "node --env-file=.env prisma/seed.mjs",
     "db:import:excel": "node --env-file=.env scripts/import-excel.mjs",
+    "uploads:migrate:paths": "node prisma/migrate-upload-paths.mjs",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
