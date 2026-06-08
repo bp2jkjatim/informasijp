@@ -31,6 +31,8 @@ cd app
 SSH_HOST=your.server.ip SSH_USER=deploy ./deploy/deploy.sh
 ```
 
+The local `deploy/deploy.sh` script only bootstraps the remote checkout. After it pulls the target branch on the server, it runs the checked-out `deploy/remote-deploy.sh` from that server copy so the deployment behavior always matches the latest committed code on the branch.
+
 Optional deployment variables:
 
 ```bash
