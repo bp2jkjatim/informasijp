@@ -3,6 +3,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Button, Callout, Card, NumberInput, Select, SelectItem, TextInput, Title } from "@tremor/react";
 import { appPath } from "@/lib/paths";
+import { getUploadSizeLimitMessage, MAX_UPLOAD_SIZE_MB, isUploadSizeAllowed } from "@/lib/upload-limits";
 
 type EmployeeOption = {
   id: number;
@@ -44,12 +45,31 @@ export function SupportingDocumentForm({
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
+  function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const nextFile = event.target.files?.[0] || null;
+
+    if (nextFile && !isUploadSizeAllowed(nextFile.size)) {
+      setFile(null);
+      setMessage({ type: "error", text: getUploadSizeLimitMessage("File bukti dukung") });
+      event.target.value = "";
+      return;
+    }
+
+    setFile(nextFile);
+    setMessage(null);
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitting(true);
     setMessage(null);
 
     try {
+      if (file && !isUploadSizeAllowed(file.size)) {
+        setMessage({ type: "error", text: getUploadSizeLimitMessage("File bukti dukung") });
+        return;
+      }
+
       const formData = new FormData();
       if (employeeId) formData.set("employeeId", employeeId);
       formData.set("periodMonth", periodMonth);
@@ -62,10 +82,22 @@ export function SupportingDocumentForm({
         body: formData,
       });
 
-      const payload = (await response.json()) as { ok?: boolean; message?: string };
+      let payload: { ok?: boolean; message?: string } = {};
+      const contentType = response.headers.get("content-type") || "";
+
+      if (contentType.includes("application/json")) {
+        payload = (await response.json()) as { ok?: boolean; message?: string };
+      }
 
       if (!response.ok || !payload.ok) {
-        setMessage({ type: "error", text: payload.message || "Gagal menyimpan bukti dukung." });
+        setMessage({
+          type: "error",
+          text:
+            payload.message ||
+            (response.status === 413
+              ? getUploadSizeLimitMessage("File bukti dukung")
+              : "Gagal menyimpan bukti dukung."),
+        });
         return;
       }
 
@@ -133,9 +165,10 @@ export function SupportingDocumentForm({
           <input
             type="file"
             accept=".pdf,.png,.jpg,.jpeg,.xlsx,.xls,.doc,.docx"
-            onChange={(event: ChangeEvent<HTMLInputElement>) => setFile(event.target.files?.[0] || null)}
+            onChange={handleFileChange}
             className="block w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900"
           />
+          <p className="mt-2 text-xs text-slate-500">Format PDF, image, Excel, atau Word, maksimal {MAX_UPLOAD_SIZE_MB} MB.</p>
         </div>
 
         {message ? (

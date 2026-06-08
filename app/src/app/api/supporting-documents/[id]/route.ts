@@ -1,8 +1,8 @@
 import { unlink } from "fs/promises";
-import path from "path";
 import { NextResponse } from "next/server";
 import { requireCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { resolveStoredUploadPath } from "@/lib/uploads";
 
 export const dynamic = "force-dynamic";
 
@@ -83,7 +83,7 @@ export async function DELETE(
     return access.response;
   }
 
-  const absolutePath = path.join(process.cwd(), access.document.filePath);
+  const absolutePath = resolveStoredUploadPath(access.document.filePath);
 
   await prisma.supportingDocument.delete({
     where: { id: access.document.id },

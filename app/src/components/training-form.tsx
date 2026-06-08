@@ -3,6 +3,7 @@
 import { ChangeEvent, FormEvent, useMemo, useState } from "react";
 import { Button, Callout, Card, NumberInput, Select, SelectItem, TextInput, Title } from "@tremor/react";
 import { appPath } from "@/lib/paths";
+import { getUploadSizeLimitMessage, MAX_UPLOAD_SIZE_MB, isUploadSizeAllowed } from "@/lib/upload-limits";
 
 type EmployeeOption = {
   id: number;
@@ -70,12 +71,37 @@ export function TrainingForm({
     [employeeId, employeeOptions],
   );
 
+  function handleCertificateFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const nextFile = event.target.files?.[0] || null;
+
+    if (nextFile && !isUploadSizeAllowed(nextFile.size)) {
+      setCertificateFile(null);
+      setSubmitState({
+        type: "error",
+        message: getUploadSizeLimitMessage("File sertifikat"),
+      });
+      event.target.value = "";
+      return;
+    }
+
+    setCertificateFile(nextFile);
+    setSubmitState(null);
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitting(true);
     setSubmitState(null);
 
     try {
+      if (certificateFile && !isUploadSizeAllowed(certificateFile.size)) {
+        setSubmitState({
+          type: "error",
+          message: getUploadSizeLimitMessage("File sertifikat"),
+        });
+        return;
+      }
+
       const formData = new FormData();
 
       if (employeeId) {
@@ -103,15 +129,28 @@ export function TrainingForm({
         body: formData,
       });
 
-      const payload = (await response.json()) as {
+      let payload: {
         ok?: boolean;
         message?: string;
-      };
+      } = {};
+
+      const contentType = response.headers.get("content-type") || "";
+
+      if (contentType.includes("application/json")) {
+        payload = (await response.json()) as {
+          ok?: boolean;
+          message?: string;
+        };
+      }
 
       if (!response.ok || !payload.ok) {
         setSubmitState({
           type: "error",
-          message: payload.message || "Penyimpanan diklat gagal.",
+          message:
+            payload.message ||
+            (response.status === 413
+              ? getUploadSizeLimitMessage("File sertifikat")
+              : "Penyimpanan diklat gagal."),
         });
         return;
       }
@@ -299,11 +338,10 @@ export function TrainingForm({
           <input
             type="file"
             accept=".pdf,.png,.jpg,.jpeg"
-            onChange={(event: ChangeEvent<HTMLInputElement>) =>
-              setCertificateFile(event.target.files?.[0] || null)
-            }
+            onChange={handleCertificateFileChange}
             className="block w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900"
           />
+          <p className="mt-2 text-xs text-slate-500">Format PDF/JPG/PNG, maksimal {MAX_UPLOAD_SIZE_MB} MB.</p>
         </div>
 
         <div className="md:col-span-2 border-t border-slate-300 pt-5">

@@ -21,7 +21,7 @@ The production compose file runs:
 
 - `app`: Next.js on `127.0.0.1:3500`
 - `mariadb`: MariaDB for Prisma
-- `uploads_data`: persistent uploaded files
+- bind mount `${UPLOADS_HOST_DIR:-/mnt/nas/informasijp/uploads}` to `/app/uploads`
 - `mariadb_data`: persistent database storage
 
 Deploy from your local machine:
@@ -38,9 +38,12 @@ SSH_PORT=22
 REMOTE_DIR=/opt/informasijp
 BRANCH=v2
 REPO_URL=https://github.com/bp2jkjatim/informasijp.git
+UPLOADS_HOST_DIR=/mnt/nas/informasijp/uploads
 ```
 
-On first deploy, the script creates `/opt/informasijp/app/.env.production` with generated database and session credentials. Edit that file on the server if you need custom credentials, then redeploy.
+On first deploy, the script creates `/opt/informasijp/app/.env.production` with generated database and session credentials plus `UPLOADS_DIR=/app/uploads`. The production container writes uploaded files to `/app/uploads`, which is bind-mounted from the host NAS path.
+
+When upgrading from the old Docker named volume, the deploy script also copies existing files from the legacy `uploads_data` volume into `UPLOADS_HOST_DIR` before starting the app with the new bind mount.
 
 Nginx should reverse proxy to the app container through the host loopback address:
 

@@ -14,9 +14,10 @@ Optional:
   REMOTE_DIR=/opt/informasijp
   BRANCH=v2
   REPO_URL=https://github.com/bp2jkjatim/informasijp.git
+  UPLOADS_HOST_DIR=/mnt/nas/informasijp/uploads
 
 Example:
-  SSH_HOST=203.0.113.10 SSH_USER=deploy ./deploy/deploy.sh
+  SSH_HOST=203.0.113.10 SSH_USER=deploy UPLOADS_HOST_DIR=/mnt/nas/informasijp/uploads ./deploy/deploy.sh
 USAGE
 }
 
@@ -35,15 +36,18 @@ SSH_PORT="${SSH_PORT:-22}"
 REMOTE_DIR="${REMOTE_DIR:-/opt/informasijp}"
 BRANCH="${BRANCH:-v2}"
 REPO_URL="${REPO_URL:-https://github.com/bp2jkjatim/informasijp.git}"
+UPLOADS_HOST_DIR="${UPLOADS_HOST_DIR:-/mnt/nas/informasijp/uploads}"
 
 SSH_TARGET="${SSH_USER}@${SSH_HOST}"
 
-ssh -p "$SSH_PORT" "$SSH_TARGET" bash -se -- "$REMOTE_DIR" "$BRANCH" "$REPO_URL" <<'REMOTE_SCRIPT'
+ssh -p "$SSH_PORT" "$SSH_TARGET" bash -se -- "$REMOTE_DIR" "$BRANCH" "$REPO_URL" "$UPLOADS_HOST_DIR" <<'REMOTE_SCRIPT'
 set -euo pipefail
 
 REMOTE_DIR="$1"
 BRANCH="$2"
 REPO_URL="$3"
+UPLOADS_HOST_DIR="$4"
+export UPLOADS_HOST_DIR
 
 if ! command -v git >/dev/null 2>&1; then
   echo "git is required on the server"
@@ -113,17 +117,50 @@ MYSQL_PASSWORD=${mysql_password}
 DATABASE_URL=mysql://informasijp:${mysql_password}@mariadb:3306/informasijp_app
 SESSION_SECRET=${session_secret}
 NEXT_PUBLIC_BASE_PATH=/sisdm
+UPLOADS_DIR=/app/uploads
 ENV_FILE
 
   chmod 600 .env.production
   echo "Created $REMOTE_DIR/app/.env.production with generated credentials"
 fi
 
+mkdir -p "$UPLOADS_HOST_DIR/certificates" "$UPLOADS_HOST_DIR/supporting-documents"
+
+migrate_uploads_from_legacy_volume() {
+  local target_dir="$1"
+  local project_name="${COMPOSE_PROJECT_NAME:-$(basename "$PWD")}"
+  local legacy_volumes=(
+    "${project_name}_uploads_data"
+    "uploads_data"
+  )
+  local source_volume=""
+
+  for candidate in "${legacy_volumes[@]}"; do
+    if docker volume inspect "$candidate" >/dev/null 2>&1; then
+      source_volume="$candidate"
+      break
+    fi
+  done
+
+  if [[ -z "$source_volume" ]]; then
+    echo "No legacy uploads volume found. Skipping file migration."
+    return
+  fi
+
+  echo "Migrating uploads from Docker volume ${source_volume} to ${target_dir}"
+  docker run --rm \
+    -v "${source_volume}:/from:ro" \
+    -v "${target_dir}:/to" \
+    alpine:3.20 \
+    sh -c 'mkdir -p /to && cp -a /from/. /to/ 2>/dev/null || true'
+}
+
 docker compose -f docker-compose.prod.yml build app migrate
 docker compose -f docker-compose.prod.yml up -d mariadb
 docker compose -f docker-compose.prod.yml run --rm migrate
 docker compose -f docker-compose.prod.yml stop app >/dev/null 2>&1 || true
 docker compose -f docker-compose.prod.yml rm -f app >/dev/null 2>&1 || true
+migrate_uploads_from_legacy_volume "$UPLOADS_HOST_DIR"
 docker compose -f docker-compose.prod.yml up -d app
 docker compose -f docker-compose.prod.yml ps
 docker compose -f docker-compose.prod.yml exec -T app sh -c 'echo "Running app commit: ${APP_GIT_COMMIT}"'

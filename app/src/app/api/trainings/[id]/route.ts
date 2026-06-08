@@ -4,6 +4,12 @@ import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { requireCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import {
+  buildStoredUploadPath,
+  getUploadsSubdir,
+  resolveStoredUploadPath,
+} from "@/lib/uploads";
+import { getUploadSizeLimitMessage, isUploadSizeAllowed } from "@/lib/upload-limits";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +18,7 @@ function parseBoolean(value: FormDataEntryValue | null) {
 }
 
 async function saveCertificateFile(file: File) {
-  const uploadsDir = path.join(process.cwd(), "uploads", "certificates");
+  const uploadsDir = getUploadsSubdir("certificates");
   await mkdir(uploadsDir, { recursive: true });
 
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -21,7 +27,7 @@ async function saveCertificateFile(file: File) {
   const bytes = await file.arrayBuffer();
 
   await writeFile(outputPath, Buffer.from(bytes));
-  return path.join("uploads", "certificates", filename);
+  return buildStoredUploadPath("certificates", filename);
 }
 
 async function assertTrainingAccess(trainingId: number, userId: number, role: string, employeeId: number | null) {
@@ -84,10 +90,17 @@ export async function PATCH(
   const certificateFile = formData.get("certificateFile");
 
   if (certificateFile instanceof File && certificateFile.size > 0) {
+    if (!isUploadSizeAllowed(certificateFile.size)) {
+      return NextResponse.json(
+        { ok: false, message: getUploadSizeLimitMessage("File sertifikat") },
+        { status: 400 },
+      );
+    }
+
     const newPath = await saveCertificateFile(certificateFile);
 
     if (training.certificateFilePath) {
-      const previousPath = path.join(process.cwd(), training.certificateFilePath);
+      const previousPath = resolveStoredUploadPath(training.certificateFilePath);
 
       await unlink(previousPath).catch(() => undefined);
     }
@@ -151,7 +164,7 @@ export async function DELETE(
   });
 
   if (training.certificateFilePath) {
-    const previousPath = path.join(process.cwd(), training.certificateFilePath);
+    const previousPath = resolveStoredUploadPath(training.certificateFilePath);
     await unlink(previousPath).catch(() => undefined);
   }
 

@@ -1,9 +1,9 @@
 import { readFile } from "fs/promises";
-import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { requireCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { isPreviewableMimeType } from "@/lib/supporting-documents";
+import { resolveStoredUploadPath } from "@/lib/uploads";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +39,7 @@ export async function GET(
     );
   }
 
-  const absolutePath = path.join(process.cwd(), document.filePath);
+  const absolutePath = resolveStoredUploadPath(document.filePath);
   const bytes = await readFile(absolutePath);
   const disposition =
     mode === "preview" ? "inline" : `attachment; filename="${encodeURIComponent(document.fileOriginalName)}"`;

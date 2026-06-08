@@ -3,6 +3,11 @@ import path from "path";
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { requireCurrentUser } from "@/lib/auth";
+import {
+  buildStoredUploadPath,
+  getUploadsSubdir,
+} from "@/lib/uploads";
+import { getUploadSizeLimitMessage, isUploadSizeAllowed } from "@/lib/upload-limits";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -65,7 +70,14 @@ export async function POST(request: Request) {
   const certificateFile = formData.get("certificateFile");
 
   if (certificateFile instanceof File && certificateFile.size > 0) {
-    const uploadsDir = path.join(process.cwd(), "uploads", "certificates");
+    if (!isUploadSizeAllowed(certificateFile.size)) {
+      return NextResponse.json(
+        { ok: false, message: getUploadSizeLimitMessage("File sertifikat") },
+        { status: 400 },
+      );
+    }
+
+    const uploadsDir = getUploadsSubdir("certificates");
     await mkdir(uploadsDir, { recursive: true });
 
     const safeName = certificateFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -74,7 +86,7 @@ export async function POST(request: Request) {
     const bytes = await certificateFile.arrayBuffer();
 
     await writeFile(outputPath, Buffer.from(bytes));
-    certificateFilePath = path.join("uploads", "certificates", filename);
+    certificateFilePath = buildStoredUploadPath("certificates", filename);
   }
 
   await prisma.training.create({

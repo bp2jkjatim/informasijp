@@ -3,6 +3,7 @@ import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { requireCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { resolveStoredUploadPath } from "@/lib/uploads";
 
 export const dynamic = "force-dynamic";
 
@@ -65,7 +66,7 @@ export async function GET(
     );
   }
 
-  const absolutePath = path.join(process.cwd(), training.certificateFilePath);
+  const absolutePath = resolveStoredUploadPath(training.certificateFilePath);
   const bytes = await readFile(absolutePath);
   const fileName = getOriginalName(training.certificateFilePath);
   const disposition = mode === "preview" ? "inline" : `attachment; filename="${encodeURIComponent(fileName)}"`;

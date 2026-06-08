@@ -4,6 +4,11 @@ import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { requireCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import {
+  buildStoredUploadPath,
+  getUploadsSubdir,
+} from "@/lib/uploads";
+import { getUploadSizeLimitMessage, isUploadSizeAllowed } from "@/lib/upload-limits";
 
 export const dynamic = "force-dynamic";
 
@@ -60,6 +65,13 @@ export async function POST(request: Request) {
     );
   }
 
+  if (!isUploadSizeAllowed(uploadedFile.size)) {
+    return NextResponse.json(
+      { ok: false, message: getUploadSizeLimitMessage("File bukti dukung") },
+      { status: 400 },
+    );
+  }
+
   const extension = path.extname(uploadedFile.name).toLowerCase();
 
   if (!ALLOWED_FILE_EXTENSIONS.has(extension)) {
@@ -84,7 +96,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const uploadsDir = path.join(process.cwd(), "uploads", "supporting-documents");
+  const uploadsDir = getUploadsSubdir("supporting-documents");
   await mkdir(uploadsDir, { recursive: true });
 
   const safeName = uploadedFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -102,7 +114,7 @@ export async function POST(request: Request) {
       description,
       fileOriginalName: uploadedFile.name,
       fileStoredName: storedName,
-      filePath: path.join("uploads", "supporting-documents", storedName),
+      filePath: buildStoredUploadPath("supporting-documents", storedName),
       mimeType: uploadedFile.type || null,
       createdByUserId: user.id,
     },
