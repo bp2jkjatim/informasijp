@@ -1,15 +1,22 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { Button, Callout, Card, TextInput, Title } from "@tremor/react";
-import { RiLockPasswordLine, RiUserLine } from "@remixicon/react";
+import { Button, Callout, TextInput } from "@tremor/react";
+import { RiLockPasswordLine, RiRefreshLine, RiShieldCheckLine, RiUserLine } from "@remixicon/react";
 import { appPath } from "@/lib/paths";
 
 export function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [captcha, setCaptcha] = useState("");
+  const [captchaNonce, setCaptchaNonce] = useState(() => Date.now());
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  function refreshCaptcha() {
+    setCaptcha("");
+    setCaptchaNonce(Date.now());
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -22,7 +29,7 @@ export function LoginForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, captcha }),
       });
 
       const payload = (await response.json()) as {
@@ -33,73 +40,92 @@ export function LoginForm() {
 
       if (!response.ok || !payload.ok) {
         setError(payload.message || "Login gagal.");
+        refreshCaptcha();
         return;
       }
 
       window.location.href = payload.redirectTo || appPath("/");
     } catch {
       setError("Terjadi gangguan koneksi saat login.");
+      refreshCaptcha();
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <Card className="planner-card rounded-[28px] p-6 md:p-7">
-      <div className="mb-6">
-        <div className="text-xs font-medium uppercase tracking-[0.22em] text-slate-400">
-          Secure Access
-        </div>
-        <Title className="!mt-3 !text-2xl !font-semibold !tracking-tight !text-slate-950">
-          Login Informasi JP
-        </Title>
-        <p className="mt-3 text-sm leading-7 text-slate-500">
-          Gunakan akun hasil seed awal. Admin dan pegawai login memakai username
-          dan password awal sesuai aturan bootstrap sistem.
-        </p>
+    <form className="space-y-4" onSubmit={handleSubmit}>
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-slate-900">
+          Username / NIP
+        </label>
+        <TextInput
+          icon={RiUserLine}
+          placeholder="Masukkan username atau NIP"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
+        />
       </div>
 
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <div className="rounded-3xl border border-slate-200 p-4">
-          <label className="mb-2 block text-sm font-medium text-slate-900">
-            Username / NIP
-          </label>
-          <TextInput
-            icon={RiUserLine}
-            placeholder="Masukkan username atau NIP"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-slate-900">
+          Password
+        </label>
+        <TextInput
+          type="password"
+          icon={RiLockPasswordLine}
+          placeholder="Masukkan password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+        />
+      </div>
+
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-slate-900">
+          Kode Captcha
+        </label>
+        <div className="mb-2 flex items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={appPath(`/api/auth/captcha?ts=${captchaNonce}`)}
+            alt="Kode captcha"
+            width={180}
+            height={60}
+            className="h-[60px] w-[180px] rounded-lg border border-slate-200 bg-slate-100"
           />
+          <button
+            type="button"
+            onClick={refreshCaptcha}
+            aria-label="Muat ulang captcha"
+            title="Muat ulang captcha"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50 hover:text-slate-700"
+          >
+            <RiRefreshLine size={18} />
+          </button>
         </div>
+        <TextInput
+          icon={RiShieldCheckLine}
+          placeholder="Masukkan kode di gambar"
+          autoComplete="off"
+          value={captcha}
+          onChange={(event) => setCaptcha(event.target.value)}
+        />
+      </div>
 
-        <div className="rounded-3xl border border-slate-200 p-4">
-          <label className="mb-2 block text-sm font-medium text-slate-900">
-            Password
-          </label>
-          <TextInput
-            type="password"
-            icon={RiLockPasswordLine}
-            placeholder="Masukkan password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
+      {error ? (
+        <Callout color="rose" title="Login gagal">
+          {error}
+        </Callout>
+      ) : null}
 
-        {error ? (
-          <Callout color="rose" title="Login gagal">
-            {error}
-          </Callout>
-        ) : null}
-
-        <Button
-          type="submit"
-          color="blue"
-          className="!mt-2 !w-full !rounded-xl !py-2.5"
-          loading={submitting}
-        >
-          Masuk
-        </Button>
-      </form>
-    </Card>
+      <Button
+        type="submit"
+        color="blue"
+        className="!mt-2 !w-full !rounded-xl !py-2.5"
+        loading={submitting}
+      >
+        Masuk
+      </Button>
+    </form>
   );
 }

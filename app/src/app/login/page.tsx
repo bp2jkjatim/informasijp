@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
-import { Badge, Card, Text, Title } from "@tremor/react";
 import { LoginForm } from "@/components/login-form";
 import { getCurrentUser, getUserHomePath } from "@/lib/auth";
+import { appPath } from "@/lib/paths";
 
 export default async function LoginPage() {
   const user = await getCurrentUser();
@@ -10,83 +10,41 @@ export default async function LoginPage() {
     redirect(getUserHomePath(user.role));
   }
 
+  const backgroundImage = appPath("/login-bg.jpg");
+  const logo = appPath("/logo-pu.jpg");
+
   return (
-    <main className="min-h-screen bg-[#f8fafc] px-3 py-3 md:px-4">
-      <div className="mx-auto grid min-h-[calc(100vh-1.5rem)] max-w-[1400px] gap-3 lg:grid-cols-[minmax(0,1.1fr)_420px]">
-        <Card className="planner-main flex flex-col justify-between rounded-[28px] p-6 md:p-7">
-          <div>
-            <div className="flex items-center gap-2 text-sm text-slate-400">
-              <span>Home</span>
-              <span>/</span>
-              <span className="text-slate-500">Secure Access</span>
-            </div>
-            <Title className="!mt-4 !text-4xl !font-semibold !tracking-tight !text-slate-950 md:!text-5xl">
-              Login admin dan pegawai dalam satu app.
-            </Title>
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-500 md:text-base">
-              Fondasi auth sudah tersambung ke database hasil seed. Struktur halaman ini
-              mengikuti bahasa visual Planner: ringan, terang, dan fokus pada operasi
-              harian tanpa dark mode.
-            </p>
-          </div>
+    <main
+      className="relative flex min-h-screen items-center justify-center px-4 py-10"
+      style={{
+        backgroundImage: `linear-gradient(rgba(248, 250, 252, 0.8), rgba(248, 250, 252, 0.8)), url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="w-full max-w-md rounded-[28px] border border-white/60 bg-white/90 p-8 shadow-2xl shadow-slate-900/10 backdrop-blur-md md:p-10">
+        <div className="flex flex-col items-center text-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={logo}
+            alt="Logo Kementerian PU"
+            className="h-20 w-20 object-contain"
+          />
+          <h1 className="mt-5 text-2xl font-semibold tracking-tight text-slate-950">
+            SISDM
+          </h1>
+          <p className="mt-1 text-sm font-medium text-slate-500">
+            Sistem Informasi SDM
+          </p>
+          <p className="mt-0.5 text-xs text-slate-400">
+            BP2JK Wilayah Jawa Timur
+          </p>
+        </div>
 
-          <div className="mt-6 grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
-            <div className="planner-card rounded-[28px] p-5">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-                <div>
-                  <div className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
-                    Access Rules
-                  </div>
-                  <div className="mt-2 text-lg font-semibold text-slate-950">
-                    Kredensial bootstrap
-                  </div>
-                </div>
-                <Badge color="blue">Light Only</Badge>
-              </div>
-
-              <div className="mt-4 overflow-hidden rounded-3xl border border-slate-200">
-                <div className="grid grid-cols-[1.2fr_1fr] border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
-                  <div>Jenis Akun</div>
-                  <div>Kredensial Awal</div>
-                </div>
-                <div className="grid grid-cols-[1.2fr_1fr] border-b border-slate-200 px-4 py-4 text-sm text-slate-700">
-                  <div>Admin</div>
-                  <div>NIP / NIP</div>
-                </div>
-                <div className="grid grid-cols-[1.2fr_1fr] border-b border-slate-200 px-4 py-4 text-sm text-slate-700">
-                  <div>Pegawai</div>
-                  <div>NIP / NIP</div>
-                </div>
-                <div className="grid grid-cols-[1.2fr_1fr] px-4 py-4 text-sm text-slate-700">
-                  <div>Outsourcing</div>
-                  <div>Alias / Alias</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="planner-card rounded-[28px] p-5">
-              <div className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
-                Workspace Notes
-              </div>
-              <div className="mt-3 space-y-3">
-                <div className="rounded-3xl border border-slate-200 px-4 py-4">
-                  <Text className="!text-slate-500">Mode tampilan</Text>
-                  <div className="mt-1 text-base font-semibold text-slate-950">Light only, tanpa night mode</div>
-                </div>
-                <div className="rounded-3xl border border-slate-200 px-4 py-4">
-                  <Text className="!text-slate-500">Arah template</Text>
-                  <div className="mt-1 text-base font-semibold text-slate-950">Planner-style shell dan data cards</div>
-                </div>
-                <div className="rounded-3xl border border-slate-200 px-4 py-4">
-                  <Text className="!text-slate-500">Login pertama</Text>
-                  <div className="mt-1 text-base font-semibold text-slate-950">Tidak wajib ganti password</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        <LoginForm />
+        <div className="mt-8">
+          <LoginForm />
+        </div>
       </div>
     </main>
   );

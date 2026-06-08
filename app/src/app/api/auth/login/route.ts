@@ -1,16 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createUserSession, getUserHomePath } from "@/lib/auth";
 import { verifyPassword } from "@/lib/auth-password";
+import { verifyCaptcha } from "@/lib/captcha";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   const body = (await request.json()) as {
     username?: string;
     password?: string;
+    captcha?: string;
   };
 
   const username = body.username?.trim();
   const password = body.password?.trim();
+
+  if (!verifyCaptcha(body.captcha)) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Kode captcha salah atau sudah kedaluwarsa.",
+      },
+      { status: 400 },
+    );
+  }
 
   if (!username || !password) {
     return NextResponse.json(
